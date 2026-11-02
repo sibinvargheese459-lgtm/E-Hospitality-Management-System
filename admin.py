@@ -1,8 +1,13 @@
 from django.contrib import admin
-from .models import Bill
+from .models import Prescription, Medicine
 
 
-@admin.register(Bill)
-class BillAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'total_amount', 'payment_status', 'payment_method', 'generated_on')
-    list_filter = ('payment_status', 'payment_method')
+class MedicineInline(admin.TabularInline):
+    model = Medicine
+    extra = 1
+
+
+@admin.register(Prescription)
+class PrescriptionAdmin(admin.ModelAdmin):
+    list_display = ('patient', 'doctor', 'issued_on')
+    inlines = [MedicineInline]

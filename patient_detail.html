@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{{ patient.full_name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">{{ patient.full_name }}</h4>
+  <div>
+    <a href="{% url 'patients:edit' patient.pk %}" class="btn btn-outline-secondary">Edit</a>
+    <a href="{% url 'appointments:add' %}" class="btn btn-brand">Book Appointment</a>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3">
+      <p class="mb-1"><strong>Gender:</strong> {{ patient.get_gender_display }}</p>
+      <p class="mb-1"><strong>DOB:</strong> {{ patient.date_of_birth|default:"-" }}</p>
+      <p class="mb-1"><strong>Blood Group:</strong> {{ patient.blood_group|default:"-" }}</p>
+      <p class="mb-1"><strong>Phone:</strong> {{ patient.phone|default:"-" }}</p>
+      <p class="mb-1"><strong>Email:</strong> {{ patient.email|default:"-" }}</p>
+      <p class="mb-1"><strong>Address:</strong> {{ patient.address|default:"-" }}</p>
+      <p class="mb-0"><strong>Emergency Contact:</strong> {{ patient.emergency_contact_name|default:"-" }} ({{ patient.emergency_contact_phone|default:"-" }})</p>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+        Medical History
+        <button class="btn btn-sm btn-brand" data-bs-toggle="modal" data-bs-target="#historyModal">Add Entry</button>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for h in history %}
+        <li class="list-group-item">
+          <strong>{{ h.condition }}</strong> — {{ h.diagnosis_date|default:"" }}
+          <div class="text-muted small">{{ h.notes }}</div>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No medical history recorded.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="historyModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'patients:add_history' patient.pk %}">
+        {% csrf_token %}
+        <div class="modal-header"><h5 class="modal-title">Add Medical History</h5></div>
+        <div class="modal-body">
+          {% for field in history_form %}
+          <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-brand">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

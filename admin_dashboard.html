@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - MediCare HMS{% endblock %}
+{% block content %}
+<h3 class="mb-4">Welcome back, {{ user.get_full_name|default:user.username }}</h3>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="small text-uppercase">Total Patients</div>
+      <div class="stat-number">{{ total_patients }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card alt1">
+      <div class="small text-uppercase">Total Doctors</div>
+      <div class="stat-number">{{ total_doctors }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card alt2">
+      <div class="small text-uppercase">Pending Appointments</div>
+      <div class="stat-number">{{ pending_appointments }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card alt3">
+      <div class="small text-uppercase">Unpaid Bills</div>
+      <div class="stat-number">{{ unpaid_bills }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <a href="{% url 'patients:add' %}" class="btn btn-brand w-100"><i class="fa-solid fa-user-plus me-1"></i> Add Patient</a>
+  </div>
+  <div class="col-md-3">
+    <a href="{% url 'doctors:add' %}" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-user-doctor me-1"></i> Add Doctor</a>
+  </div>
+  <div class="col-md-3">
+    <a href="{% url 'appointments:add' %}" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-calendar-plus me-1"></i> Book Appointment</a>
+  </div>
+  <div class="col-md-3">
+    <a href="{% url 'billing:add' %}" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-file-invoice-dollar me-1"></i> Create Bill</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header bg-white fw-semibold">Recent Appointments</div>
+  <div class="table-responsive">
+    <table class="table mb-0 align-middle">
+      <thead>
+        <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for appt in recent_appointments %}
+        <tr>
+          <td><a href="{% url 'patients:detail' appt.patient.pk %}">{{ appt.patient }}</a></td>
+          <td>{{ appt.doctor }}</td>
+          <td>{{ appt.appointment_date }}</td>
+          <td>{{ appt.appointment_time }}</td>
+          <td><span class="badge status-badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted py-3">No appointments yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

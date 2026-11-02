@@ -1,12 +1,18 @@
-from django.urls import path
-from . import views
-
-app_name = 'billing'
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.BillListView.as_view(), name='list'),
-    path('add/', views.BillCreateView.as_view(), name='add'),
-    path('<int:pk>/', views.BillDetailView.as_view(), name='detail'),
-    path('<int:pk>/edit/', views.BillUpdateView.as_view(), name='edit'),
-    path('<int:pk>/delete/', views.BillDeleteView.as_view(), name='delete'),
+    path('admin/', admin.site.urls),
+    path('', include('dashboard.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('patients/', include('patients.urls')),
+    path('doctors/', include('doctors.urls')),
+    path('appointments/', include('appointments.urls')),
+    path('prescriptions/', include('prescriptions.urls')),
+    path('billing/', include('billing.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

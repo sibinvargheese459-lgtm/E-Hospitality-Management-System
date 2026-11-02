@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Bill Detail{% endblock %}
+{% block content %}
+<h4 class="mb-3">Bill #{{ bill.pk }}</h4>
+<div class="card p-4" style="max-width:600px;">
+  <p class="mb-1"><strong>Patient:</strong> {{ bill.patient }}</p>
+  <p class="mb-1"><strong>Consultation Fee:</strong> ₹{{ bill.consultation_fee }}</p>
+  <p class="mb-1"><strong>Medicine Charges:</strong> ₹{{ bill.medicine_charges }}</p>
+  <p class="mb-1"><strong>Other Charges:</strong> ₹{{ bill.other_charges }}</p>
+  <p class="mb-1"><strong>Discount:</strong> ₹{{ bill.discount }}</p>
+  <hr>
+  <p class="mb-1 fs-5"><strong>Total:</strong> ₹{{ bill.total_amount }}</p>
+  <p class="mb-1"><strong>Status:</strong> {{ bill.get_payment_status_display }}</p>
+  <p class="mb-3"><strong>Method:</strong> {{ bill.get_payment_method_display|default:"-" }}</p>
+  <a href="{% url 'billing:edit' bill.pk %}" class="btn btn-outline-secondary">Edit</a>
+</div>
+{% endblock %}

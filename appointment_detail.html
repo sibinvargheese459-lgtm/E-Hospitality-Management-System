@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Appointment Detail{% endblock %}
+{% block content %}
+<h4 class="mb-3">Appointment Detail</h4>
+<div class="card p-4" style="max-width:600px;">
+  <p class="mb-1"><strong>Patient:</strong> {{ appointment.patient }}</p>
+  <p class="mb-1"><strong>Doctor:</strong> {{ appointment.doctor }}</p>
+  <p class="mb-1"><strong>Date:</strong> {{ appointment.appointment_date }}</p>
+  <p class="mb-1"><strong>Time:</strong> {{ appointment.appointment_time }}</p>
+  <p class="mb-1"><strong>Reason:</strong> {{ appointment.reason|default:"-" }}</p>
+  <p class="mb-1"><strong>Status:</strong> <span class="badge status-badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span></p>
+  <p class="mb-3"><strong>Notes:</strong> {{ appointment.notes|default:"-" }}</p>
+  <div class="d-flex gap-2">
+    <a href="{% url 'appointments:edit' appointment.pk %}" class="btn btn-outline-secondary">Edit</a>
+    <a href="{% url 'prescriptions:add' %}" class="btn btn-brand">Write Prescription</a>
+    <a href="{% url 'billing:add' %}" class="btn btn-outline-secondary">Create Bill</a>
+  </div>
+</div>
+{% endblock %}

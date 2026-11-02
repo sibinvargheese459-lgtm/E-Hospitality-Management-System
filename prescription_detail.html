@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Prescription Detail{% endblock %}
+{% block content %}
+<h4 class="mb-3">Prescription for {{ prescription.patient }}</h4>
+<div class="card p-4" style="max-width:720px;">
+  <p class="mb-1"><strong>Doctor:</strong> {{ prescription.doctor }}</p>
+  <p class="mb-1"><strong>Issued On:</strong> {{ prescription.issued_on|date:"d M Y H:i" }}</p>
+  <p class="mb-1"><strong>Diagnosis:</strong> {{ prescription.diagnosis|default:"-" }}</p>
+  <p class="mb-3"><strong>Notes:</strong> {{ prescription.notes|default:"-" }}</p>
+  <h6>Medicines</h6>
+  <table class="table">
+    <thead><tr><th>Name</th><th>Dosage</th><th>Frequency</th><th>Duration</th><th>Instructions</th></tr></thead>
+    <tbody>
+      {% for m in prescription.medicines.all %}
+      <tr><td>{{ m.name }}</td><td>{{ m.dosage }}</td><td>{{ m.frequency }}</td><td>{{ m.duration }}</td><td>{{ m.instructions }}</td></tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No medicines listed.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'prescriptions:edit' prescription.pk %}" class="btn btn-outline-secondary">Edit</a>
+</div>
+{% endblock %}
